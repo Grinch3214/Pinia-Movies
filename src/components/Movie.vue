@@ -6,15 +6,20 @@
       class="movie-img" />
     <div>
       <div class="movie-name">
-        {{ movie.original_title }} ({{ movie.release_date }})
+        {{ movie.original_title }} ({{ fixDate(movie.release_date) }})
       </div>
       <span class="movie-overview">{{ movie.overview }}</span>
-      <div class="movie-buttons">
+      <div class="movie-buttons" v-if="!isSearch">
         <button class="btn movie-buttons-watched" @click="movieStore.toggleWatched(movie.id)">
           <span v-if="!movie.isWatched">Watched</span>
           <span v-else>Unwatched</span>
         </button>
         <button class="btn movie-buttons-delete" @click="movieStore.deleteMovie(movie.id)">Delete</button>
+      </div>
+			<div class="movie-buttons" v-else>
+        <button class="btn btn_green">
+					Add
+				</button>
       </div>
     </div>
   </div>
@@ -25,11 +30,26 @@ import { useMovieStore } from '../stores/MovieStore'
 
 const movieStore = useMovieStore()
 
+const fixDate = (releaseDate) => {
+	if(!releaseDate) {
+		return 'unknown date'
+	}
+	let dateStr = releaseDate;
+	let parts = dateStr.split('-')
+	let reversedDateStr = parts[2] + "." + parts[1] + "." + parts[0];
+	return reversedDateStr
+}
+
 	const props = defineProps({
 		movie: {
 			type: Object,
 			required: true,
 			default: () => {}
+		},
+		isSearch: {
+			type: Boolean,
+			required: false,
+			default: false
 		}
 	})
 </script>
@@ -66,7 +86,7 @@ const movieStore = useMovieStore()
 .movie-buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
 }
 .movie-buttons-watched {
   color: #fff;
