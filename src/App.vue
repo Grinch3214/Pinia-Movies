@@ -9,7 +9,15 @@
 			<button :class="['btn', {btn_green: movieStore.activeTab === 2}]">Search</button>
 		</div>
 		<div class="movies" v-if="movieStore.activeTab === 1">
-			<h3>All Movies</h3>
+			<div>
+				<h3>Watched Movies (total: {{ movieStore.watchedMovies.length }})</h3>
+				<Movie
+					v-for="movie in movieStore.watchedMovies"
+					:key="movie.id"
+					:movie="movie"
+				/>
+			</div>
+			<h3>All Movies (total: {{ movieStore.totalCountMovies }})</h3>
 			<Movie
 				v-for="movie in movieStore.movies"
 				:key="movie.id"
