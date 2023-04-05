@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import { useMovieStore } from "./MovieStore";
+
 const url = 'https://api.themoviedb.org/3/search/movie?api_key=2c2636479369db22879a5175b93aa34b&query='
 
 export const useSearchStore =  defineStore('searchStore', {
@@ -14,6 +16,11 @@ export const useSearchStore =  defineStore('searchStore', {
 			console.log(data.results)
 			this.movies = data.results
 			this.loader = false
+		},
+		addToUserMovies(object) {
+			const movieStore = useMovieStore();
+			movieStore.movies.push({ ...object, isWatched: false })
+			movieStore.activeTab = 1
 		}
 	}
 })
